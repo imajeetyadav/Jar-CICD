@@ -19,7 +19,7 @@ jobs:
       - name: Build application
         run: |
             mvn -B clean package -DskipTests --file pom.xml
-      - uses: mr-smithers-excellent/docker-build-push@0e68818ea37ba7728f417f03a58e06e68d9d2592 # v5.9
+      - uses: mr-smithers-excellent/docker-build-push@f8f78238603ab7953b961d99dc93ef0701295c60 # v6.2
         with:
             image: imajeetyadav/jar-cicd
             registry: docker.io
