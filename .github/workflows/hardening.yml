@@ -24,7 +24,7 @@ jobs:
         with:
           java-version: '8'
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@f5ce41475b483ad7581884324a6eca9f48f8dcc7 # v1.2.1
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -34,7 +34,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B verify checkstyle:checkstyle
         
-      - uses: jwgmeligmeyling/checkstyle-github-action@master
+      - uses: jwgmeligmeyling/checkstyle-github-action@a12be500c097a5cedab881d4785ef9b4a4d3ee6a # master
         with:
           path: '**/checkstyle-result.xml'
 
@@ -55,7 +55,7 @@ jobs:
         with:
           java-version: '8'
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@f5ce41475b483ad7581884324a6eca9f48f8dcc7 # v1.2.1
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -64,7 +64,7 @@ jobs:
           
       - name: Build with Maven
         run: mvn -B verify spotbugs:spotbugs
-      - uses: jwgmeligmeyling/spotbugs-github-action@master
+      - uses: jwgmeligmeyling/spotbugs-github-action@875e3b6fc5b97deadd8ea150948e53c2d40b13be # master
         with:
           path: '**/spotbugsXml.xml'
 
@@ -86,7 +86,7 @@ jobs:
         with:
           java-version: '8'
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@f5ce41475b483ad7581884324a6eca9f48f8dcc7 # v1.2.1
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -115,7 +115,7 @@ jobs:
         with:
           java-version: '8'
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@f5ce41475b483ad7581884324a6eca9f48f8dcc7 # v1.2.1
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -137,12 +137,17 @@ jobs:
     name: Deploy to Elastic Beanstalk
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@cba0d00b1fc9a034e1e642ea0f1103c282990604 # v2.5.0
+        with:
+          egress-policy: audit
+
       - name: Download JAR
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@cbed621e49e4c01b044d60f6c80ea4ed6328b281 # v2.1.1
         with:
           name: artifact
       - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v21
+        uses: einaregilsson/beanstalk-deploy@18e5b85bd914cabf00fccabe72f60b8757dcd3cb # v21
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }} 
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -158,8 +163,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy 
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@cba0d00b1fc9a034e1e642ea0f1103c282990604 # v2.5.0
+        with:
+          egress-policy: audit
+
       - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
+        uses: rtCamp/action-slack-notify@12e36fc18b0689399306c2e0b3e0f2978b7f1ee7 # v2.2.0
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: general
